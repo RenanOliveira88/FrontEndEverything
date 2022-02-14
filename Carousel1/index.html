@@ -3,33 +3,126 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />   
         
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/luxonauta/luxa@latest/dist/compressed/luxa.css">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              document.querySelectorAll(".carousel-container").forEach(carousel => {
+                insertNumbers(carousel);
+
+                carousel.querySelector(".prev").addEventListener("click", e => {
+                  minusItem(carousel);
+                });
+
+                carousel.querySelector(".next").addEventListener("click", () => {
+                  plusItem(carousel);
+                });
+
+                insertDots(carousel);
+
+                carousel.querySelectorAll(".dot").forEach(dot => {
+                  dot.addEventListener("click", e => {
+                    let item = Array.prototype.indexOf.call(
+                    e.target.parentNode.children,
+                    e.target);
+
+
+                    showItems(carousel, item);
+                  });
+                });
+
+                showItems(carousel, 0);
+              });
+            });
+
+            function insertNumbers(carousel) {
+              const length = carousel.querySelectorAll(".item").length;
+              for (let i = 0; i < length; i++) {
+                const nmbr = document.createElement("div");
+                nmbr.classList.add("numbertext");
+                nmbr.innerText = i + 1 + " / " + length;
+
+                carousel.querySelectorAll(".item")[i].append(nmbr);
+              };
+            }
+
+            function insertDots(carousel) {
+              const dots = document.createElement("div");
+              dots.classList.add("dots");
+
+              carousel.append(dots);
+
+              carousel.querySelectorAll(".item").forEach(elem => {
+                const dot = document.createElement("div");
+                dot.classList.add("dot");
+
+                carousel.querySelector(".dots").append(dot);
+              });
+            }
+
+            function plusItem(carousel) {
+              let item = currentItem(carousel);
+
+              carousel.
+              querySelectorAll(".item")[
+              item].nextElementSibling.classList.contains("item") ?
+              showItems(carousel, item + 1) :
+              showItems(carousel, 0);
+            }
+
+            function minusItem(carousel) {
+              let item = currentItem(carousel);
+
+              carousel.querySelectorAll(".item")[item].previousElementSibling != null ?
+              showItems(carousel, item - 1) :
+              showItems(carousel, carousel.querySelectorAll(".item").length - 1);
+            }
+
+            function currentItem(carousel) {
+              return [...carousel.querySelectorAll(".item")].findIndex(
+              item => item.style.display == "block");
+
+            }
+
+            function showItems(carousel, item) {
+              if (carousel.querySelectorAll(".item")[currentItem(carousel)] != undefined)
+              carousel.querySelectorAll(".item")[currentItem(carousel)].style.display =
+              "none";
+              carousel.querySelectorAll(".item")[item].style.display = "block";
+
+              if (carousel.querySelector(".dot.active") != null)
+              carousel.querySelector(".dot.active").classList.remove("active");
+              carousel.querySelectorAll(".dot")[item].classList.add("active");
+            }
+                                                                     
+           </script>
     </head>
     <body>
         <main>
-            <section class="has-dflex-center">
-                <div class="lx-container-80">
-                    <div class="lx-row">
-                        <div class="lx-card lx-container">
-                            <div class="item-fade">
-                                <div class="image"><img src="https://bit.ly/34xczKy"/></div>
-                            </div>
-                            <div class="item-fade">
-                                <div class="image"><img src="https://bit.ly/3lkp5DW"/></div>
-                                <div class="text is-text-left">
-                                    <h1 class="title"> <i class="far fa-hand-point-right"></i>&nbsp;This item has a title.</h1>
-                                    <p>This item has a caption, aligned to the left.</p>
-                                </div>
-                            </div>
-                            <div class="item-fade">
-                                <div class="image"><img src="https://bit.ly/3iMHuI1"/></div>
-                                <div class="text text-is-centered">
-                                    <p> <i class="fa fa-info-circle"></i>&nbsp;This item has a caption aligned to the center.</p>
-                                </div>
-                            </div><a class="prev has-dflex-center"><i class="fas fa-angle-left"></i></a><a class="next has-dflex-center"><i class="fas fa-angle-right"></i></a>
-                        </div>
+          <section class="has-dflex-center">
+            <div class="lx-container-80">
+              <div class="lx-row">
+                <div class="lx-card carousel-container">
+                  <div class="item fade">
+                    <div class="image"><img src="https://bit.ly/34xczKy"/></div>
+                  </div>
+                  <div class="item fade">
+                    <div class="image"><img src="https://bit.ly/3lkp5DW"/></div>
+                    <div class="text is-text-left">
+                      <h1 class="title"> <i class="far fa-hand-point-right"></i>&nbsp;This item has a title.</h1>
+                      <p>This item has a caption, aligned to the left.</p>
                     </div>
+                  </div>
+                  <div class="item fade">
+                    <div class="image"><img src="https://bit.ly/3iMHuI1"/></div>
+                    <div class="text is-text-centered">
+                      <p> <i class="fas fa-info-circle"></i>&nbsp;This item has a caption, aligned to the center.</p>
+                    </div>
+                  </div><a class="prev has-dflex-center"><i class="fas fa-angle-left"></i></a><a class="next has-dflex-center"><i class="fas fa-angle-right"></i></a>
                 </div>
-            </section>
+              </div>
+            </div>
+          </section>
         </main>
+
     </body>
 </html>
